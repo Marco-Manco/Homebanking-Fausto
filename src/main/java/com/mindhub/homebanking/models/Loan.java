@@ -1,6 +1,9 @@
 package com.mindhub.homebanking.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,6 +17,8 @@ import static java.util.stream.Collectors.toList;
 
 
 @Entity
+@Getter
+@Setter
 public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -35,38 +40,6 @@ public class Loan {
         this.name = name;
         this.maxAmount = maxAmount;
         this.payments = payments;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getMaxAmount() {
-        return maxAmount;
-    }
-
-    public void setMaxAmount(double maxAmount) {
-        this.maxAmount = maxAmount;
-    }
-
-    public List<Integer> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(List<Integer> payments) {
-        this.payments = payments;
-    }
-
-    public Set<ClientLoan> getClientLoans() {
-        return clientLoans;
     }
 
     public void addClientLoan(ClientLoan clientLoan) {

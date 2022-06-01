@@ -1,10 +1,12 @@
 package com.mindhub.homebanking.models;
 
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
 @Entity
+@Data
 public class ClientLoan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -30,39 +32,4 @@ public class ClientLoan {
         this.payments = payments;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public Loan getLoan() {
-        return loan;
-    }
-
-    public void setLoan(Loan loan) {
-        this.loan = loan;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public int getPayments() {
-        return payments;
-    }
-
-    public void setPayments(int payment) {
-        this.payments = payment;
-    }
 }

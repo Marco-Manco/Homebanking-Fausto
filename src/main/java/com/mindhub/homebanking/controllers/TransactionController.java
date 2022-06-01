@@ -66,10 +66,6 @@ public class TransactionController {
         destinationAccount.setBalance(destinationAccount.getBalance() + Double.parseDouble(transactionAmount));
         accountRepository.save(sourceAccount);
         accountRepository.save(destinationAccount);
-        //entra al if cuando es una transaccion entre cuentas propias, al else cuando es una transaccion a la cuenta de un 3ero
-//        if(currentClient.getId() == destinationAccount.getClient().getId()){
-//
-//        }
         return new ResponseEntity<>("Succesful transaction", HttpStatus.ACCEPTED);
     }
 }

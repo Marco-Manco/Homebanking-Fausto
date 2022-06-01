@@ -1,6 +1,8 @@
 package com.mindhub.homebanking.models;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -10,6 +12,8 @@ import java.util.Set;
 
 
 @Entity
+@Getter
+@Setter
 public class Account {
 
     @Id
@@ -33,44 +37,6 @@ public class Account {
         this.number = number;
         this.creationDate = creationDate;
         this.balance = balance;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-    public Long getId(){return this.id;}
-
-    public Set<Transaction> getTransactions() {
-        return transactions;
     }
 
     public void addTransaction(Transaction transaction){

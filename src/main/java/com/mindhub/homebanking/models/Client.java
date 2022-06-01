@@ -1,5 +1,7 @@
 package com.mindhub.homebanking.models;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 @Entity
+@Getter
+@Setter
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -37,58 +41,14 @@ public class Client {
         this.email = email;
         this.password = password;
     }
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Set<Account> getAccounts() {
-        return accounts;
-    }
 
     public void addAccount(Account account) {
         account.setClient(this);
         this.accounts.add(account);
     }
-    public Long getId(){
-        return this.id;
-    }
-
-    public Set<ClientLoan> getClientLoans() {
-        return clientLoans;
-    }
-
     public void addClientLoan(ClientLoan clientLoan) {
         clientLoan.setClient(this);
         clientLoans.add(clientLoan);
-    }
-
-    //hace practicamente lo mismo q getClientLoans: revisar esto luego!
-//    public List<ClientLoan> getLoans() {
-//        return new ArrayList<>(clientLoans);
-//    }
-
-    public Set<Card> getCards() {
-        return cards;
     }
 
     public void addCard(Card card){
@@ -96,19 +56,10 @@ public class Client {
         cards.add(card);
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    //metodos utiles
     public String getFullName(){
         return this.firstName + " " + this.lastName;
     }
-
-    //metodos utiles
     public boolean containsAccount(String accountNumber){
         //este if esta para q no se rompa cuando accouts este vacio, revisar validaciones luego, no me gusta esto aca
         if(this.accounts.size() == 0){
