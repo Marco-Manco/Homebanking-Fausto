@@ -31,10 +31,6 @@ public class TransactionController {
         Account sourceAccount = accountRepository.findByNumber(sourceAccountNumber);
         Account destinationAccount = accountRepository.findByNumber(destinationAccountNumber);
 
-        //no estoy seguro si este primer if ese necesario en este contexto, investigar!
-        if (currentClient == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
         if(transactionAmount.isEmpty() || description.isEmpty() || sourceAccountNumber.isEmpty() || destinationAccountNumber.isEmpty()){
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }

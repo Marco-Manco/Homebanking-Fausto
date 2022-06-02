@@ -1,14 +1,22 @@
+
+let form = document.querySelector("form")
 const urlApi = `http://localhost:8080/api/clients/current/accounts`
 Vue.createApp({
   data() {
     return {
       accounts: [],
       destinationAccount:"",
-      amount: 0,
+      amount: 1,
       description: "",
       externalDestinationAccount: "",
       sourceAccount: "",
-      arrivalAccount:""
+      arrivalAccount:"",
+      
+      mostrarDatos: true,
+      transferenciaExitosa: false,
+      mostrarBotonTransferencia: true,
+      transferenciaError: false,
+      mensajeDeError: ""
     }
   },
 
@@ -32,15 +40,36 @@ Vue.createApp({
           location.href = `${url}web/index.html`
         })//borrar codigo repetido luego
     },
-    async transfer(){
+    async transferir(){
       try {
         await axios.post('/api/transactions',`transactionAmount=${this.amount}&description=${this.description}&sourceAccountNumber=${this.sourceAccount}&destinationAccountNumber=${this.arrivalAccount}` ,{headers:{'content-type':'application/x-www-form-urlencoded'}})
-        //mostrar algun mensaje o algo de q se creo la cuenta en el html
         console.log("succesful transaction")
+        this.mostrarBotonTransferencia = false
+        this.mostrarDatos = false
+        this.transferenciaExitosa = true
       } catch (error) {
         console.log(error.response.data)
+        this.mostrarBotonTransferencia = false
+        this.mostrarDatos = false
+        this.transferenciaError = true
+        this.mensajeDeError = error.response.data
       }
-    }
+    },
+    cerrar(){
+      if(this.transferenciaExitosa == true){
+        location.reload()
+      }else{
+        this.mostrarDatos= true
+        this.transferenciaExitosa= false
+        this.mostrarBotonTransferencia= true
+        this.transferenciaError= false
+        this.mensajeDeError= ""
+      }
+    },
+    transfer(){
+      $('#staticBackdrop').modal('show'); // abrir
+    },
+
   },
   computed:{
     
