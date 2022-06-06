@@ -43,14 +43,14 @@
       </div>
     </nav>
   </header>
-  <main class="container">
+  <main class="container py-3">
     <form v-on:submit.prevent="transfer">
       <div class="d-flex flex-column gap-2">
-        <p class="m-0 p-0">Type of transfer</p>
+        <p class="m-0 p-0 subtitle">Type of transfer</p>
         <div class="d-flex gap-3">
           <label>
-            Own account
-            <input type="radio" name="typeOfTransfer" value="ownAccount" v-model="destinationAccount" required>
+            Own account <span class="mensaje-boton-disabled" v-if="accounts?.length <= 1">You only have one account </span>
+            <input type="radio" name="typeOfTransfer" value="ownAccount" v-model="destinationAccount" required v-bind:disabled="accounts?.length > 1 ? false : true">
           </label>
           <label>
             Third party account
@@ -61,7 +61,7 @@
 
       <div v-if="destinationAccount !=''">
         <div v-if="destinationAccount == 'ownAccount'">
-          <div>
+          <div class="my-2">
             <p class="p-0 m-0">Source Account</p>
             <select v-model="sourceAccount" required>
               <option v-bind:value="account.number" v-for="account in accounts">{{account.number}}</option>
@@ -71,20 +71,20 @@
           <div>
             <p class="p-0 m-0">Destination Account</p>
             <select v-model="arrivalAccount" required>
-              <option v-bind:value="account.number" v-for="account in accounts">{{account.number}}</option>
+              <option v-bind:disabled="account.number == sourceAccount" v-bind:value="account.number" v-for="account in accounts">{{account.number}}</option>
             </select>
           </div>
         </div>
 
         <div v-else>
-          <div>
+          <div class="my-2">
             <p class="p-0 m-0">Source Account</p>
             <select v-model="sourceAccount" required>
               <option v-bind:value="account.number" v-for="account in accounts">{{account.number}}</option>
             </select>
           </div>
   
-          <div>
+          <div class="my-2">
             <label>
               Write the destination account
               <input type="text" v-model="arrivalAccount" required>
@@ -92,39 +92,39 @@
           </div>
         </div>
 
-        <div>
+        <div class="my-2">
           <label>
             Amount
             <input required type="number" min="1" step="0.01" v-model="amount" >
           </label>
         </div>
 
-        <div>
+        <div class="my-2">
           <label>
             Description
             <input type="text" name="description" v-model="description" required>
           </label>
         </div>
+
+        <button type="submit" class="btn btn-primary">Transfer</button>
       </div>
       
-      <button type="submit" class="btn btn-primary">Transfer</button>
-      <!-- <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-        Transfer
-      </button> -->
+      
       
     </form>
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+            <h5 class="modal-title" id="staticBackdropLabel">Transfer</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" v-on:click="cerrar"></button>
           </div>
           <div class="modal-body">
 
             <div v-if="mostrarDatos">
-              <p>datos antes de enviar transferencia</p>
+              <p>Destination Account: {{arrivalAccount}}</p>
+              <p>Amount: {{amount}}</p>
             </div>
 
             <div v-if="transferenciaExitosa">

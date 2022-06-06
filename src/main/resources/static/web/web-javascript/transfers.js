@@ -69,6 +69,9 @@ Vue.createApp({
     transfer(){
       $('#staticBackdrop').modal('show'); // abrir
     },
+    clearForm(){
+      document.querySelector("form").reset();
+    }
 
   },
   computed:{

@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accounts</title>
+  <title>Loan application</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-  <link rel="stylesheet" href="web-styles/style.css">
+  <link rel="stylesheet" href="./web-styles/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body id="app">
 
@@ -18,7 +19,7 @@
         </a>
 
         <div class="order-sm-3 toggleIconContainer">
-          <a href="#" v-on:click.stop="logOutClient">Log out</a>
+          <a href="#" v-on:click="logOutClient">Log out</a>
           <button class="navbar-toggler border" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -27,8 +28,9 @@
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
+           
             <li class="nav-item">
-              <a class="nav-link" href="#">Accounts</a>
+              <a class="nav-link" href="accounts.html">Accounts</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="./cards.html">Cards</a>
@@ -44,55 +46,38 @@
     </nav>
   </header>
 
-  
-  <main class="container">
-    
-    <div class="pt-2 pb-2">
-      <h3>Wellcome: {{client.firstName}} {{client.lastName}}</h3>
-    </div>
-
-    <h4>Your Accounts:</h4>
-    <div class="d-flex w-100 flex-column align-items-center gap-3 mb-3 bg-dark d-sm-flex flex-sm-row justify-content-sm-around">
-      <div class="card m-3" v-for="account in client.accounts" v-on:click="goToTransactionsForAccount(account.id)">
-        <div class="card-body">
-          <h5 class="card-title">{{account.number}}</h5>
-          <p>Creation Date:</p>
-          <p>{{formatDate(account.creationDate)}}</p>
-          <p>Balance: {{account.balance}}</p>
+  <main>
+    <form v-on:submit.prevent="">
+      <div class="d-flex  flex-column p-2">
+        <legend>Loan type:</legend>
+        <div class="d-flex gap-2">
+          <label v-for="loan in loans">{{loan.name}}
+            <input class="form-check-input" type="radio" name="loanType" v-bind:value="loan.name" v-model="loanType" required>
+          </label>
         </div>
       </div>
-    </div>
- 
-    <p class="btn btn-primary border" v-if="!(client.accounts?.length > 2)" v-on:click="addAccount">Add new Account</p>
 
-    <div class="table-responsive" v-if="client.credits != 0">
-      <h4>Your Credits:</h4>
-      <table class="table table-hover">
-        <thead>
-          <tr class="table-dark"> 
-            <th>Type</th>
-            <th> Amount</th>
-            <th>Payments</th> 
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="credit in client.credits" class="table-secondary">
-            <td>{{credit.name}}</td>
-            <td>{{credit.amount}}</td>
-            <td>{{credit.payments}}</td>
-            
-          </tr>
-        </tbody>
-      </table>
-      <!-- <a href="./loan-application.html" class="btn btn-primary mb-3">Apply</a> -->
-    </div>
-    <div v-else>
-      <h4>You don't have loans</h4>
-    </div>
-  
-  
+      <div class="d-flex  flex-column p-2">
+        <legend>Payments available:</legend>
+        <select v-model="payments" required>
+          <option v-bind:value="payment" v-for="payment in loan.payments">{{account.number}}</option>
+        </select>
+      </div>
+
+      <!-- <div class="d-flex flex-column p-2">
+        <legend>Card Type:</legend>
+        <div class="d-flex  gap-2">
+          <label>Credit
+            <input type="radio" name="card-type" value="CREDIT" v-model="cardType">
+          </label>
+          <label>Debit
+            <input type="radio" name="card-type" value="DEBIT" v-model="cardType">
+          </label>  
+        </div>
+        <button type="submit" class="btn btn-primary my-2">Add Card</button>
+      </div> -->
+    </form>
   </main>
-
   <footer class="d-flex align-items-center">
     <div class="row g-0 w-100">
       <div class="col-4 col-sm-3 d-flex justify-content-center align-items-center">
@@ -129,12 +114,10 @@
         <small>&copy;Mindhub cohort 27 | Marco A. Manco</small>
       </div>
     </div>
-    
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/vue@3"></script>
-  <script src="https://unpkg.com/vue-router@4"></script>
-  <script src="./web-javascript/accounts.js"></script>
+  <script src="./web-javascript/loan-application.js"></script>
 </body>
 </html>
