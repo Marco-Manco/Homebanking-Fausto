@@ -49,10 +49,10 @@ public class LoanController {
         if(loanAplicationDTO.isSomePropertyNull()){
             return new ResponseEntity<>("Missing data",HttpStatus.FORBIDDEN);
         }
-        if(loanAplicationDTO.getAmount() == 0){
+        if(loanAplicationDTO.getAmount() <= 0){
             return new ResponseEntity<>("Amount can not be 0", HttpStatus.FORBIDDEN);
         }
-        if(loanAplicationDTO.getPayments() == 0){
+        if(loanAplicationDTO.getPayments() <= 0){
             return new ResponseEntity<>("Payments can not be 0", HttpStatus.FORBIDDEN);
         }
         if(loan == null){

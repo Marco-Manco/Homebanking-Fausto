@@ -37,7 +37,12 @@ Vue.createApp({
           let [url] = location.href.split("web")
           location.href = `${url}web/index.html`
         })//borrar codigo repetido luego
-    }
+    },
+    formatDate(localDateTime){
+      let [date,hour] = localDateTime.split("T")
+      let [formatedHour] = hour.split(".")
+      return `${date} ${formatedHour}`
+    },
   },
 
   computed:{

@@ -40,6 +40,9 @@ public class TransactionController {
         if(sourceAccount == null){
             return new ResponseEntity<>("The account does not exist", HttpStatus.FORBIDDEN);
         }
+        if(Integer.parseInt(transactionAmount) <= 0){
+            return new ResponseEntity<>("The amount can not be negative",HttpStatus.FORBIDDEN);
+        }
         if(!currentClient.containsAccount(sourceAccountNumber)){
             return new ResponseEntity<>("The account does not belong to you",HttpStatus.FORBIDDEN);
         }
