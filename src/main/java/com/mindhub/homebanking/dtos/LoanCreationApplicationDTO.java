@@ -18,4 +18,7 @@ public class LoanCreationApplicationDTO {
         return (this.name ==null || this.maxAmount == null ||
                 this.payments.size()==0 || this.interestPercentage == null);
     }
+    public boolean isSomePaymentNegative(){
+        return this.payments.stream().anyMatch(payment -> payment < 0);
+    }
 }

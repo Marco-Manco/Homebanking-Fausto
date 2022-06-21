@@ -72,11 +72,12 @@ public class LoanController {
         return new ResponseEntity<>("Loan approved successfully", HttpStatus.CREATED);
     }
     @PostMapping("/loans/new")
-    public ResponseEntity<Object> createNewTypeOfLoan(Authentication authentication,
-                                                      @RequestBody LoanCreationApplicationDTO loanCreationApplicationDTO){
-        Client admin = clientService.getClientByEmail(authentication.getName());
+    public ResponseEntity<Object> createNewTypeOfLoan(@RequestBody LoanCreationApplicationDTO loanCreationApplicationDTO){
         if(loanCreationApplicationDTO.isSomePropertyNull()){
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if(loanCreationApplicationDTO.isSomePaymentNegative()){
+            return new ResponseEntity<>("Payments can not be negative", HttpStatus.FORBIDDEN);
         }
         if(loanCreationApplicationDTO.getInterestPercentage() <= 0 ||
                 loanCreationApplicationDTO.getInterestPercentage() > 100){
