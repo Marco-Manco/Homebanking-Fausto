@@ -1,6 +1,6 @@
 
 let form = document.querySelector("form")
-const urlApi = `http://localhost:8080/api/clients/current/accounts`
+const urlApi = `/api/clients/current/accounts`
 Vue.createApp({
   data() {
     return {

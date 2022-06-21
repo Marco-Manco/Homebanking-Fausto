@@ -1,4 +1,4 @@
-const urlApi = 'http://localhost:8080/api/clients/current/cards'
+const urlApi = '/api/clients/current/cards'
 
 Vue.createApp({
 
@@ -53,7 +53,7 @@ Vue.createApp({
 
     async deleteCard(cardId){
       try {
-        await axios.patch(`http://localhost:8080/api/clients/current/cards?cardId=${cardId}`)
+        await axios.patch(`/api/clients/current/cards?cardId=${cardId}`)
         location.reload()
         console.log("Card successfull deleted")
       } catch (error) {

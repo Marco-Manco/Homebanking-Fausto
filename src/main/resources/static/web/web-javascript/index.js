@@ -1,4 +1,4 @@
-const urlApi = `http://localhost:8080/api/clients/current`
+const urlApi = `/api/clients/current`
 Vue.createApp({
 
   data() {

@@ -1,5 +1,5 @@
-const loanEndpoint = `http://localhost:8080/api/loans`
-const accountsEndpoint = `http://localhost:8080/api/clients/current/accounts`
+const loanEndpoint = `/api/loans`
+const accountsEndpoint = `/api/clients/current/accounts`
 Vue.createApp({
   data() {
     return {

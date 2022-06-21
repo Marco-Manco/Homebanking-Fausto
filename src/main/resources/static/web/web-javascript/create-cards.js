@@ -23,7 +23,6 @@ Vue.createApp({
     async addCard(){
       try {
         await axios.post('/api/clients/current/cards',`color=${this.cardColor}&type=${this.cardType}` ,{headers:{'content-type':'application/x-www-form-urlencoded'}})
-        //mostrar algun mensaje o algo de q se creo la cuenta en el html
         this.goToCards()
       } catch (error) {
         console.log("no se pudo agregar una cuenta nueva")

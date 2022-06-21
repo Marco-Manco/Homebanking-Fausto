@@ -1,6 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const accountId = urlParams.get('id');
-const urlApi = `http://localhost:8080/api/accounts/${accountId}`
+const urlApi = `/api/accounts/${accountId}`
 var specialElementHandlers = {
   '.no-export':function(element,renderer){
     return true
@@ -34,7 +34,7 @@ Vue.createApp({
     },
     async getTransactions(accountId){
       try {
-        const {data} = await axios.get(`http://localhost:8080/api/clients/current/transactions?accountId=${accountId}`)
+        const {data} = await axios.get(`/api/clients/current/transactions?accountId=${accountId}`)
         this.transactions = data
       } catch (error) {
         console.error(error)
@@ -62,7 +62,7 @@ Vue.createApp({
     },
     async filterTransactions(){
       try {
-        const {data} = await axios.get(`http://localhost:8080/api/clients/current/transactions?accountId=${accountId}&start=${this.fromDate + 'T00:00:00'}&end=${this.thruDate + 'T00:00:00'}`)
+        const {data} = await axios.get(`/api/clients/current/transactions?accountId=${accountId}&start=${this.fromDate + 'T00:00:00'}&end=${this.thruDate + 'T00:00:00'}`)
         this.transactions = data
       } catch (error) {
         console.error(error)
