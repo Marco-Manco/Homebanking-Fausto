@@ -48,7 +48,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAccountById(Long id) {
-        return accountRepository.getById(id);
+        return accountRepository.findById(id).orElse(null);
     }
 
 
@@ -94,6 +94,6 @@ public class AccountServiceImpl implements AccountService {
         if(accountWithSufficientBalanceDTO == null){
             return null;
         }
-        return accountRepository.getById(accountWithSufficientBalanceDTO.getId());
+        return accountRepository.findById(accountWithSufficientBalanceDTO.getId()).orElse(null);
     }
 }
