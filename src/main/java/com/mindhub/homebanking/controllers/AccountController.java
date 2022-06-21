@@ -79,6 +79,9 @@ public class AccountController {
         if(accountNumber.isEmpty()){
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
+        if(accountService.getAccountByNumber(accountNumber).getBalance()>0){
+            return new ResponseEntity<>("You can not delete an account with balance, transfer the money first", HttpStatus.FORBIDDEN);
+        }
         accountService.deleteAccount(authentication, accountNumber);
         return new ResponseEntity<>("Account deleted successfully", HttpStatus.OK);
     }
