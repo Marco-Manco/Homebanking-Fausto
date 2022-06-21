@@ -1,7 +1,7 @@
 
 
 
-const urlApi = 'http://localhost:8080/api/clients/current'
+const urlApi = '/api/clients/current'
 Vue.createApp({
 
   data() {
@@ -67,7 +67,7 @@ Vue.createApp({
     },
     async deleteAccount(accountNumber){
       try {
-        await axios.patch(`http://localhost:8080/api/clients/current/accounts?accountNumber=${accountNumber}`)
+        await axios.patch(`/api/clients/current/accounts?accountNumber=${accountNumber}`)
         location.reload()
       } catch (error) {
         console.log(error.response.data)
