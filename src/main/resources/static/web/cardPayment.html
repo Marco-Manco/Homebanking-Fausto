@@ -41,10 +41,10 @@
       </nav>
     </div>
 
-    <main class="flex-grow-1 d-flex flex-column align-items-center border">
+    <main class="flex-grow-1 d-flex flex-column align-items-center">
       <div class="payment-form-container border d-flex justify-content-center">
-        <form v-on:submit.prevent="makeAPayment">
-          <legend>Make you payment</legend>
+        <form v-on:submit.prevent="makeAPayment" class="d-flex flex-column gap-3">
+          <legend>Make your payment</legend>
           <div>
             <label>
               Card number:
@@ -72,7 +72,7 @@
               <input type="text" placeholder="internet" v-model="description" required>
             </label>
           </div>
-          <button type="submit" class="btn btn-primary">pay</button>
+          <button type="submit" class="btn btn-primary mb-2" >pay</button>
         </form>
       </div>
     </main>

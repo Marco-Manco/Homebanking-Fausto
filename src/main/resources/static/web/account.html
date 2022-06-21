@@ -14,7 +14,6 @@
   
   <div class="main-container d-flex flex-column flex-md-row">
     <div class="vertical-navbar">
-
       <nav class="navbar navbar-expand-md navbar-light d-flex flex-md-column">
           <a href="#">
             <img src="./assets/pngwing.com.png" alt="logo" class="bank-logo"/>
@@ -34,23 +33,27 @@
                 <a class="nav-link" href="./transfers.html">Transfers</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="./cardPayment.html">Card payment</a>
+              </li>
+              <li class="nav-item">
                 <p class="nav-link" v-on:click="logOutClient">Log out</p>
               </li>
             </ul>            
           </div>
       </nav>
     </div>
+
     <main class="flex-grow-1 d-flex flex-column d-md-flex flex-md-row">
-      <div class="flex-grow-1 mx-2"> 
+      <div class="flex-grow-1  transactions-container" > 
         <div class="pt-2 pb-2">
           <h3 class="white">Account: {{account.number}}</h3>
-          <p class="white">Balance: {{account.balance}}</p>
+          <p class="white p-0 m-0">Balance: {{account.balance}}</p>
         </div>
   
         <div class="table-responsive">
           <h3 class="white">Transactions</h3>
           <div>
-            <form v-on:submit.prevent="filterTransactions">
+            <form v-on:submit.prevent="filterTransactions" class="d-flex gap-3 align-items-center py-1">
               <label class="white">
                 from date
                 <input type="date" v-model="fromDate">
@@ -82,7 +85,7 @@
               </tr>
             </tbody>
           </table>
-          <button class="btn btn-primary" v-on:click="print">print</button>
+          <button class="btn btn-primary" v-on:click="print">Download</button>
         </div>
         
       </div>

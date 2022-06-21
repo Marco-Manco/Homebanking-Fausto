@@ -31,6 +31,9 @@
                 <a class="nav-link" href="#">Transfers</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="./cardPayment.html">Card payment</a>
+              </li>
+              <li class="nav-item">
                 <p class="nav-link" v-on:click="logOutClient">Log out</p>
               </li>
             </ul>            
@@ -119,7 +122,7 @@
     
                 <div v-if="mostrarDatos">
                   <p>Destination Account: {{arrivalAccount}}</p>
-                  <p>Amount: {{amount}}</p>
+                  <p>Amount: ${{amount}}</p>
                 </div>
     
                 <div v-if="transferenciaExitosa">
@@ -132,7 +135,7 @@
     
               </div>
               <div class="modal-footer">
-                <button v-if="mostrarBotonTransferencia" type="button" class="btn btn-primary" v-on:click="transferir">Confirmar transferencia</button>
+                <button v-if="mostrarBotonTransferencia" type="button" class="btn btn-primary" v-on:click="transferir">Confirm transfer</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" v-on:click="cerrar">Close</button>
                 
               </div>
