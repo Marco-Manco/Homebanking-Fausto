@@ -29,14 +29,19 @@ public class Account {
     @JoinColumn(name="client_id")
     private Client client;
 
+    private boolean enabled;
+    private AccountType accountType;
+
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Transaction> transactions = new HashSet<>();
 
     public Account(){}
-    public Account(String number, LocalDateTime creationDate, double balance) {
+    public Account(String number, LocalDateTime creationDate, double balance, AccountType accountType) {
         this.number = number;
         this.creationDate = creationDate;
         this.balance = balance;
+        this.enabled = true;
+        this.accountType = accountType;
     }
 
     public void addTransaction(Transaction transaction){

@@ -22,12 +22,16 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
     private Account account;
+    private boolean enabled;
+    private Double remainingBalance;
 
     public Transaction(){}
-    public Transaction(TransactionType type, double amount, String description, LocalDateTime date) {
+    public Transaction(TransactionType type, double amount, String description, LocalDateTime date, Double remainingBalance) {
         this.type = type;
         this.amount = amount;
         this.description = description;
         this.date = date;
+        this.enabled = true;
+        this.remainingBalance = remainingBalance;
     }
 }

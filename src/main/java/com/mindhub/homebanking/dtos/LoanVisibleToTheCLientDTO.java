@@ -13,6 +13,7 @@ public class LoanVisibleToTheCLientDTO {
     private String name;
     private double maxAmount;
     private List<Integer> payments = new ArrayList<>();
+    private Float interestPercentage;
 
     public LoanVisibleToTheCLientDTO(){}
 
@@ -21,5 +22,6 @@ public class LoanVisibleToTheCLientDTO {
         this.name = loan.getName();
         this.maxAmount = loan.getMaxAmount();
         this.payments = loan.getPayments();
+        this.interestPercentage = loan.getInterestPercentage();
     }
 }

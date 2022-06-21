@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RepositoryRestResource
 public interface ClientLoanRepository extends JpaRepository<ClientLoan, Long> {
 
-    interface CartRepository extends JpaRepository<Card, Long> {
+    interface CardRepository extends JpaRepository<Card, Long> {
     }
 }

@@ -50,6 +50,22 @@ Vue.createApp({
     formatCardNumber(number){
       return  number.match(/.{1,4}/g).join(" ");
     },
+
+    async deleteCard(cardId){
+      try {
+        await axios.patch(`http://localhost:8080/api/clients/current/cards?cardId=${cardId}`)
+        location.reload()
+        console.log("Card successfull deleted")
+      } catch (error) {
+        console.log(error.response.data)
+      }
+    },
+    isExpired(expirationDate){
+      let actualDate = new Date()
+      let [date] = actualDate.toISOString().split("T")
+      let [thruDate] = expirationDate.split("T")
+      return date == thruDate
+    }
     
   },
 

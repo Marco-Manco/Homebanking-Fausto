@@ -19,7 +19,6 @@ public class Client {
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
-
     private String firstName;
     private String lastName;
     private String email;
@@ -33,6 +32,7 @@ public class Client {
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     //probando si en el linkedhash no se pierde el orden en q se agregan las cards
     private Set<Card> cards = new HashSet<>();
+    private boolean enabled;
 
     public Client(){}
     public Client(String firstName, String lastName, String email, String password) {
@@ -40,6 +40,7 @@ public class Client {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.enabled = true;
     }
 
     public void addAccount(Account account) {

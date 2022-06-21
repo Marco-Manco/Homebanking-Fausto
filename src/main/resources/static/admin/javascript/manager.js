@@ -8,7 +8,12 @@ Vue.createApp({
       firstName: "",
       lastName: "",
       email: "",
-      data:""
+      data:"",
+
+      loanName:"",
+      maxAmount:"",
+      payments: [],
+      interestPercentage: ""
     }
   },
 
@@ -58,6 +63,30 @@ Vue.createApp({
         console.error(error)
       } 
       this.getClientsFromApi(urlApi)
+    },
+    logOut(){
+      axios.post('/api/logout')
+        .then(()=>{
+          let [url] = location.href.split("admin")
+          location.href = `${url}web/index.html`
+        })
+    },
+    async createLoan(){
+      try {
+        await axios.post('/api/loans/new',
+          {
+            name: this.loanName,
+            maxAmount: this.maxAmount,
+            payments: this.payments,
+            interestPercentage: this.interestPercentage
+          },
+          {headers:{'content-type':'application/json'}})
+          location.reload()
+
+      } catch (error) {
+        this.errorMessage = error.response.data
+        console.log(error.response.data)
+      } 
     }
   },
   computed:{

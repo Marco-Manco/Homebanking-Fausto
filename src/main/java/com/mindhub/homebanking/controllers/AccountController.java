@@ -1,64 +1,86 @@
 package com.mindhub.homebanking.controllers;
-
+import com.mindhub.homebanking.Services.AccountService;
+import com.mindhub.homebanking.Services.ClientService;
 import com.mindhub.homebanking.dtos.AccountDTO;
-
-import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.AccountType;
 import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static com.mindhub.homebanking.utils.Utils.getRandomAccountNumber;
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api")
 public class AccountController {
+
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
+
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     @GetMapping("/accounts")
-    public List<AccountDTO> getAll() {
-        return accountRepository.findAll().stream().map(AccountDTO::new).collect(toList());
+    public List<AccountDTO> getAccountsDTO() {
+        return accountService.getAccountsDTO();
     }
 
     @GetMapping("/accounts/{id}")
-    public AccountDTO getAccount(@PathVariable Long id){
-        return accountRepository.findById(id).map(AccountDTO::new).orElse(null);
+    public AccountDTO getAccountById(Authentication authentication, @PathVariable Long id){
+        Client currentClient = clientService.getClientByEmail(authentication.getName());
+        AccountDTO account = accountService.getAccountDtoById(id);
+        if(account==null){
+            return null;
+        }
+        if(!currentClient.containsAccount(account.getNumber())){
+            return null;
+        }
+        return accountService.getAccountDtoById(id);
     }
 
     @PostMapping("/clients/current/accounts")
-    public ResponseEntity<Object> createAccount(Authentication authentication) {
-        Client currentClient = clientRepository.findByEmail(authentication.getName());
+    public ResponseEntity<Object> createAccount(Authentication authentication, @RequestParam AccountType accountType) {
+        Client currentClient = clientService.getClientByEmail(authentication.getName());
         //no estoy seguro si este primer if ese necesario en este contexto, investigar!
         if (currentClient == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        if(currentClient.getAccounts().size()>2){
+        if(accountType == null){
+            return new ResponseEntity<>("The type of account supplied is not valid", HttpStatus.FORBIDDEN);
+        }
+        if(accountService.getCurrentClientAccountsDTO(authentication).size() > 2){
             return new ResponseEntity<>("You already have 3 accounts", HttpStatus.FORBIDDEN);
         }
 
-        Account newAccount = new Account(getRandomAccountNumber(accountRepository), LocalDateTime.now(),0);
-        currentClient.addAccount(newAccount);
-        clientRepository.save(currentClient);
+        accountService.createAccount(authentication, currentClient, accountType);
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/clients/current/accounts")
-    public Set<AccountDTO> getAccounts(Authentication authentication){
-        return (new ClientDTO(clientRepository.findByEmail(authentication.getName()))).getAccounts();
+    public Set<AccountDTO> getCurrentClientAccountsDTO(Authentication authentication){
+        return accountService.getCurrentClientAccountsDTO(authentication);
+    }
+
+    @PatchMapping("/clients/current/accounts")
+    public ResponseEntity<Object> deleteAccount(Authentication authentication, @RequestParam String accountNumber){
+        Client currentClient = clientService.getClientByEmail(authentication.getName());
+        if (currentClient == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        if(accountService.getCurrentClientAccountsDTO(authentication).size()<2){
+            return new ResponseEntity<>("You must have unless one account", HttpStatus.FORBIDDEN);
+        }
+        if(!currentClient.containsAccount(accountNumber)){
+            return new ResponseEntity<>("You cannot delete an account that is not yours", HttpStatus.FORBIDDEN);
+        }
+        if(accountNumber.isEmpty()){
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        accountService.deleteAccount(authentication, accountNumber);
+        return new ResponseEntity<>("Account deleted successfully", HttpStatus.OK);
     }
 
 }

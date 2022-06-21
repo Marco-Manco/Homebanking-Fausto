@@ -67,6 +67,48 @@
             </tbody>
           </table>
         </div>
+
+        <div>
+          <form class="d-flex flex-column justify-content-center align-items-center border" v-on:submit.prevent="createLoan">
+            <legend class="white text-center">Create loan</legend>
+            <div class="d-flex  flex-column p-2">
+              <label>
+                Name of loan:
+                <input type="text" v-model="loanName" required>
+              </label>
+              
+              <label>
+                Max amount of loan:
+                <input type="number" min="1" max="5000000"  v-model="maxAmount" required>
+              </label>
+
+              <label>
+                Select payments:()
+                <select name="payments" multiple  v-model="payments" required>
+                  <option class="px-2">6</option>
+                  <option class="px-2">12</option>
+                  <option class="px-2">18</option>
+                  <option class="px-2">24</option>
+                  <option class="px-2">30</option>
+                  <option class="px-2">36</option>
+                </select>
+                <p>{{payments}}</p>
+              </label>
+
+              <label>
+                Enter the percentage of loan:
+                <input type="number" min="1" max="100"  v-model="interestPercentage" placeholder="ex: 30" required>
+              </label>
+            </div> 
+    
+            
+    
+            
+  
+            <button type="submit" class="btn btn-primary my-3">Apply</button>
+          </form>
+        </div>
+        <button v-on:click="logOut">log out</button>
       </div>
   
       <div class="col-lg-6 ps-3">
@@ -76,7 +118,9 @@
         </pre>
         
       </div>
+      
     </div>
+    
   </main>
   <footer>
 

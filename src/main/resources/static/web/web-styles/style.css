@@ -63,9 +63,16 @@ main{
   width: 75%;
 }
 
-.card :hover{
+/* .card :hover{
   background-color: #77c9d4;
   cursor: pointer;
+} */
+.card-body{
+	padding: 0.5rem;
+}
+.card-body p{
+	margin-top: .5rem;
+	margin-bottom: 0;
 }
 .account-card-container{
 	width: 100%;
@@ -270,6 +277,15 @@ object{
 	padding: .5rem;
 	border-radius: 2%;
 	border: solid 1px rgba(255, 255, 255, 0.773);
+}
+/*card payment*/
+.payment-form-container{
+	margin-top: 1rem;
+	width: 90%;
+}
+.payment-form-container form{
+	
+	color: white;
 }
 @media(min-width: 576px){
 	.card{

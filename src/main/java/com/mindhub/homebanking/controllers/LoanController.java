@@ -1,8 +1,9 @@
 package com.mindhub.homebanking.controllers;
 
-import com.mindhub.homebanking.dtos.LoanApplicationDTO;
-import com.mindhub.homebanking.dtos.LoanDTO;
-import com.mindhub.homebanking.dtos.LoanVisibleToTheCLientDTO;
+import com.mindhub.homebanking.Services.AccountService;
+import com.mindhub.homebanking.Services.ClientService;
+import com.mindhub.homebanking.Services.LoanService;
+import com.mindhub.homebanking.dtos.*;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
@@ -22,29 +23,23 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class LoanController {
     @Autowired
-    private LoanRepository loanRepository;
-
+    private LoanService loanService;
     @Autowired
-    private ClientRepository clientRepository;
-
+    private ClientService clientService;
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
 
     @GetMapping("/loans")
-    public List<LoanVisibleToTheCLientDTO> getLoans(){
-        return loanRepository.findAll().stream().map(LoanVisibleToTheCLientDTO::new).collect(Collectors.toList());
+    public List<LoanVisibleToTheCLientDTO> getLoansDTO(){
+        return loanService.getLoansDTO();
     }
 
     @PostMapping("/loans")
     @Transactional
     public ResponseEntity<Object> createLoan(Authentication authentication, @RequestBody LoanApplicationDTO loanAplicationDTO){
-
-
-//        Se debe actualizar la cuenta de destino sumando el monto solicitado.
-
-        Client currentClient = clientRepository.findByEmail(authentication.getName());
-        Loan loan = loanRepository.findById(loanAplicationDTO.getLoanId()).orElse(null);
-        Account destinationAccount = accountRepository.findByNumber(loanAplicationDTO.getDestinationAccountNumber());
+        Client currentClient = clientService.getClientByEmail(authentication.getName());
+        Loan loan = loanService.getLoanById(loanAplicationDTO.getLoanId());
+        Account destinationAccount = accountService.getAccountByNumber(loanAplicationDTO.getDestinationAccountNumber());
 
         if(loanAplicationDTO.isSomePropertyNull()){
             return new ResponseEntity<>("Missing data",HttpStatus.FORBIDDEN);
@@ -72,17 +67,22 @@ public class LoanController {
             return new ResponseEntity<>("The destination account does not belong to you", HttpStatus.FORBIDDEN);
         }
 
-        ClientLoan clientLoan = new ClientLoan(currentClient,loan,loanAplicationDTO.getAmount() + loanAplicationDTO.getAmount()*0.2,
-                loanAplicationDTO.getPayments());
-        currentClient.addClientLoan(clientLoan);
-        clientRepository.save(currentClient);
-
-        Transaction transaction = new Transaction(TransactionType.CREDIT, loanAplicationDTO.getAmount(),
-                loan.getName() + " Loan approved", LocalDateTime.now());
-        destinationAccount.addTransaction(transaction);
-        destinationAccount.setBalance(destinationAccount.getBalance() + loanAplicationDTO.getAmount());
-        accountRepository.save(destinationAccount);
+        loanService.createLoan(currentClient,loan, destinationAccount, loanAplicationDTO);
 
         return new ResponseEntity<>("Loan approved successfully", HttpStatus.CREATED);
+    }
+    @PostMapping("/loans/new")
+    public ResponseEntity<Object> createNewTypeOfLoan(Authentication authentication,
+                                                      @RequestBody LoanCreationApplicationDTO loanCreationApplicationDTO){
+        Client admin = clientService.getClientByEmail(authentication.getName());
+        if(loanCreationApplicationDTO.isSomePropertyNull()){
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if(loanCreationApplicationDTO.getInterestPercentage() <= 0 ||
+                loanCreationApplicationDTO.getInterestPercentage() > 100){
+            return new ResponseEntity<>("Interest percentage must be between 0 and 100", HttpStatus.FORBIDDEN);
+        }
+        loanService.createNewTypeOfLoan(loanCreationApplicationDTO);
+        return new ResponseEntity<>("New type of loan created successfully", HttpStatus.CREATED);
     }
 }

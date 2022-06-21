@@ -1,5 +1,9 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.Services.AccountService;
+import com.mindhub.homebanking.Services.ClientService;
+import com.mindhub.homebanking.Services.TransactionService;
+import com.mindhub.homebanking.dtos.TransactionDTO;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
@@ -12,24 +16,26 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
 public class TransactionController {
     @Autowired
-    private ClientRepository clientRepository;
-
+    private ClientService clientService;
     @Autowired
-    private AccountRepository accountRepository;
-
+    private AccountService accountService;
+    @Autowired
+    private TransactionService transactionService;
     @Transactional
     @PostMapping("/transactions")
     public ResponseEntity<Object> createTransaction(Authentication authentication, @RequestParam String transactionAmount, @RequestParam String description,
                                              @RequestParam String sourceAccountNumber, @RequestParam String destinationAccountNumber) {
 
-        Client currentClient = clientRepository.findByEmail(authentication.getName());
-        Account sourceAccount = accountRepository.findByNumber(sourceAccountNumber);
-        Account destinationAccount = accountRepository.findByNumber(destinationAccountNumber);
+        Client currentClient = clientService.getClientByEmail(authentication.getName());
+        Account sourceAccount = accountService.getAccountByNumber(sourceAccountNumber);
+        Account destinationAccount = accountService.getAccountByNumber(destinationAccountNumber);
 
         if(transactionAmount.isEmpty() || description.isEmpty() || sourceAccountNumber.isEmpty() || destinationAccountNumber.isEmpty()){
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
@@ -53,18 +59,30 @@ public class TransactionController {
             return new ResponseEntity<>("Insufficient balance", HttpStatus.FORBIDDEN);
         }
 
-        Transaction originAccountTransaction = new Transaction(TransactionType.DEBIT,-1*Double.parseDouble(transactionAmount),
-                description + " " + destinationAccountNumber,LocalDateTime.now());
-        Transaction destinationAccountTransaction = new Transaction(TransactionType.CREDIT, Double.parseDouble(transactionAmount),
-                description + " " + sourceAccountNumber,LocalDateTime.now());
-
-        sourceAccount.addTransaction(originAccountTransaction);
-        sourceAccount.setBalance(sourceAccount.getBalance() - Double.parseDouble(transactionAmount));
-
-        destinationAccount.addTransaction(destinationAccountTransaction);
-        destinationAccount.setBalance(destinationAccount.getBalance() + Double.parseDouble(transactionAmount));
-        accountRepository.save(sourceAccount);
-        accountRepository.save(destinationAccount);
+        transactionService.createTransaction(sourceAccount, destinationAccount, transactionAmount, description);
         return new ResponseEntity<>("Succesful transaction", HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/clients/current/transactions")
+    public ResponseEntity<?> getCurrentClientTransactions(Authentication authentication, @RequestParam Long accountId,
+                                                            @RequestParam(required = false) String start,
+                                                            @RequestParam(required = false) String end){
+        Client currenClient = clientService.getClientByEmail(authentication.getName());
+
+        if(accountId == null){
+            return new ResponseEntity<>("Missing data (accountId)", HttpStatus.FORBIDDEN);
+        }
+        Account account = accountService.getAccountById(accountId);
+        if(!account.isEnabled()){
+            return new ResponseEntity<>("The account have been deleted", HttpStatus.FORBIDDEN);
+        }
+        if(!currenClient.getAccounts().contains(account)){
+            return new ResponseEntity<>("The account is not yours", HttpStatus.FORBIDDEN);
+        }
+        if(start == null && end == null){
+            return new ResponseEntity<>(transactionService.getAccountTransactions(account), HttpStatus.OK);
+        }
+        LocalDateTime localDateStart = LocalDateTime.parse(start);
+        LocalDateTime localDateEnd = LocalDateTime.parse(end);
+        return new ResponseEntity<>(transactionService.getAccountTransactionsBetweenDates(account, localDateStart, localDateEnd),HttpStatus.OK);
     }
 }

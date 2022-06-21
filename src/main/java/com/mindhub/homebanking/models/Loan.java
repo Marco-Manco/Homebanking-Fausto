@@ -34,12 +34,14 @@ public class Loan {
 
     @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<ClientLoan> clientLoans = new HashSet<>();
+    private Float interestPercentage;
 
     public Loan(){}
-    public Loan(String name, double maxAmount, List<Integer> payments) {
+    public Loan(String name, double maxAmount, List<Integer> payments, Float interestPercentage) {
         this.name = name;
         this.maxAmount = maxAmount;
         this.payments = payments;
+        this.interestPercentage = interestPercentage;
     }
 
     public void addClientLoan(ClientLoan clientLoan) {
@@ -49,6 +51,6 @@ public class Loan {
 
 
     public List<Client> getClients(){
-        return clientLoans.stream().map(clientLoan -> clientLoan.getClient()).collect(toList());
+        return clientLoans.stream().map(ClientLoan::getClient).collect(toList());
     }
 }

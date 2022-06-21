@@ -51,68 +51,78 @@
           <div v-if="creditCards.length > 0" class="col-12 col-sm-6">
             <div class="d-flex flex-column justify-content-center align-items-center gap-3">
               <h3 class="white">Credit Cards</h3>
-              <div class="flip-card mb-2" v-for="card in creditCards">
-                <div class="flip-card-inner" :class="getBackgroundColorClass(card.color)">
-        
-                  <div class="flip-card-front">
-                    <div class="d-flex align-items-center"> 
-                      <p class="bank-name ps-3 py-1">Banco Fausto</p> 
-                    </div>
+              <div v-for="card in creditCards">
+                <div class="flip-card mb-2">
+                  <div class="flip-card-inner" :class="getBackgroundColorClass(card.color)">
           
-                    <div class="d-flex  align-items-center">
-                      <img class="ms-3 img-responsive chip-tarjeta" src="assets/chip-tarjeta.png" alt="logo de chip de tarjeta" >
-                      <object class="ms-3" data="./assets/paywave-icon.svg"> </object>
-                    </div>
-                    
-                    <div class="cardNumber">
-                      <p class="text-number">{{formatCardNumber(card.number)}}</p>
-                    </div>
-                    <div class="fromThruDates row g-0">
-                      <div class="col-6">
-                        <p class="valid-from-thru-text">valid from</p>
-                        <p class="from-thru-text">{{getMonthYear(card.fromDate)}}</p>
+                    <div class="flip-card-front">
+                      <div class="d-flex align-items-center justify-content-between"> 
+                        <p class="bank-name ps-3 py-1">Banco Fausto</p> 
+                        <p class="me-3" v-if="isExpired(card.thruDate)">Expired</p>
                       </div>
-                      <div class="col-6">
-                        <p class="valid-from-thru-text"> valid thru</p>
-                        <p class="from-thru-text">{{getMonthYear(card.thruDate)}}</p>
+                      
+                      <div class="d-flex  align-items-center">
+                        <img class="ms-3 img-responsive chip-tarjeta" src="assets/chip-tarjeta.png" alt="logo de chip de tarjeta" >
+                        <object class="ms-3" data="./assets/paywave-icon.svg"> </object>
                       </div>
+                      
+                      <div class="cardNumber">
+                        <p class="text-number">{{formatCardNumber(card.number)}}</p>
+                      </div>
+                      <div class="fromThruDates row g-0">
+                        <div class="col-6">
+                          <p class="valid-from-thru-text">valid from</p>
+                          <p class="from-thru-text">{{getMonthYear(card.fromDate)}}</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="valid-from-thru-text"> valid thru</p>
+                          <p class="from-thru-text">{{getMonthYear(card.thruDate)}}</p>
+                        </div>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-center">
+                          <p class="cardHolderName ps-3">{{card.cardHolder}}</p>
+                        </div>
+                        <div>
+                          <img class="img-responsive me-3 visa-logo" src="assets/logos/visa.png" alt="logo de visa">
+                        </div>
+                      </div>
+            
                     </div>
-                    <div class="d-flex justify-content-between">
-                      <div class="d-flex align-items-center">
-                        <p class="cardHolderName ps-3">{{card.cardHolder}}</p>
-                      </div>
+                    <div class="flip-card-back">
                       <div>
-                        <img class="img-responsive me-3 visa-logo" src="assets/logos/visa.png" alt="logo de visa">
+                        <p class="small-text my-1">Centro de Servicios VISA (011) 4379-3400 Call Collect desde el exterior (54-11) 4379-3434 </p>
                       </div>
-                    </div>
-          
-                  </div>
-                  <div class="flip-card-back">
-                    <div>
-                      <p class="small-text my-1">Centro de Servicios VISA (011) 4379-3400 Call Collect desde el exterior (54-11) 4379-3434 </p>
-                    </div>
-                    <div class="black-stripe"></div>
-                    <div>
-                      <p class="small-text my-1">En el exterior llame: EE.UU. y Canada: 1-(800) 396-9665. Otros paises: 1 (303) 967-1098 </p>
-                    </div>
-                    <div class="stripe-cvv-container">
-                      <div class="stripe-fringe">
-                        <div class="light-blue-stripe"></div>
-                        <div class="orange-stripe"></div>
-                        <div class="light-blue-stripe"></div>
-                        <div class="orange-stripe"></div>
-                        <div class="light-blue-stripe"></div>
-                        <div class="orange-stripe"></div>
-                        <div class="light-blue-stripe"></div>
-                        <div class="orange-stripe"></div>
-                      </div>
+                      <div class="black-stripe"></div>
                       <div>
-                        <p>{{card.cvv}}</p>
+                        <p class="small-text my-1">En el exterior llame: EE.UU. y Canada: 1-(800) 396-9665. Otros paises: 1 (303) 967-1098 </p>
+                      </div>
+                      <div class="stripe-cvv-container">
+                        <div class="stripe-fringe">
+                          <div class="light-blue-stripe"></div>
+                          <div class="orange-stripe"></div>
+                          <div class="light-blue-stripe"></div>
+                          <div class="orange-stripe"></div>
+                          <div class="light-blue-stripe"></div>
+                          <div class="orange-stripe"></div>
+                          <div class="light-blue-stripe"></div>
+                          <div class="orange-stripe"></div>
+                        </div>
+                        <div>
+                          <p>{{card.cvv}}</p>
+                        </div>
                       </div>
                     </div>
+  
                   </div>
+  
+                  
+                </div>
+                <div class="my-1">
+                  <button class="btn btn-primary border" v-on:click="deleteCard(card.id)">Delete Card</button>
                 </div>
               </div>
+
             </div>
           </div>
           <div v-else class="col-12 col-sm-6">
@@ -122,66 +132,72 @@
           <div v-if="debitCards.length > 0" class="col-12 col-sm-6">
             <div class="d-flex flex-column justify-content-center align-items-center gap-3">
               <h3 class="white">Debit Cards</h3>
-              <div class="flip-card mb-2" v-for="card in debitCards">
-                <div class="flip-card-inner" :class="getBackgroundColorClass(card.color)">
-        
-                  <div class="flip-card-front" >
-                    <div class="d-flex align-items-center"> 
-                      <p class="bank-name ps-3 py-1">Banco Fausto</p> 
-                    </div>
+              <div v-for="card in debitCards">
+
+                <div class="flip-card mb-2">
+                  <div class="flip-card-inner" :class="getBackgroundColorClass(card.color)">
           
-                    <div class="d-flex  align-items-center">
-                      <img class="ms-3 img-responsive chip-tarjeta" src="assets/chip-tarjeta.png" alt="logo de chip de tarjeta" >
-                      <object class="ms-3" data="./assets/paywave-icon.svg"> </object>
-                    </div>
-                    
-                    <div class="cardNumber">
-                      <p class="text-number">{{formatCardNumber(card.number)}}</p>
-                    </div>
-                    <div class="fromThruDates row g-0">
-                      <div class="col-6">
-                        <p class="valid-from-thru-text">valid from</p>
-                        <p class="from-thru-text">{{getMonthYear(card.fromDate)}}</p>
+                    <div class="flip-card-front" >
+                      <div class="d-flex align-items-center"> 
+                        <p class="bank-name ps-3 py-1">Banco Fausto</p> 
                       </div>
-                      <div class="col-6">
-                        <p class="valid-from-thru-text"> valid thru</p>
-                        <p class="from-thru-text">{{getMonthYear(card.thruDate)}}</p>
+            
+                      <div class="d-flex  align-items-center">
+                        <img class="ms-3 img-responsive chip-tarjeta" src="assets/chip-tarjeta.png" alt="logo de chip de tarjeta" >
+                        <object class="ms-3" data="./assets/paywave-icon.svg"> </object>
                       </div>
+                      
+                      <div class="cardNumber">
+                        <p class="text-number">{{formatCardNumber(card.number)}}</p>
+                      </div>
+                      <div class="fromThruDates row g-0">
+                        <div class="col-6">
+                          <p class="valid-from-thru-text">valid from</p>
+                          <p class="from-thru-text">{{getMonthYear(card.fromDate)}}</p>
+                        </div>
+                        <div class="col-6">
+                          <p class="valid-from-thru-text"> valid thru</p>
+                          <p class="from-thru-text">{{getMonthYear(card.thruDate)}}</p>
+                        </div>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-center">
+                          <p class="cardHolderName ps-3">{{card.cardHolder}}</p>
+                        </div>
+                        <div>
+                          <img class="img-responsive me-3 visa-logo" src="assets/logos/visa.png" alt="logo de visa">
+                        </div>
+                      </div>
+            
                     </div>
-                    <div class="d-flex justify-content-between">
-                      <div class="d-flex align-items-center">
-                        <p class="cardHolderName ps-3">{{card.cardHolder}}</p>
-                      </div>
+                    <div class="flip-card-back" >
                       <div>
-                        <img class="img-responsive me-3 visa-logo" src="assets/logos/visa.png" alt="logo de visa">
+                        <p class="small-text my-1">Centro de Servicios VISA (011) 4379-3400 Call Collect desde el exterior (54-11) 4379-3434 </p>
                       </div>
-                    </div>
-          
-                  </div>
-                  <div class="flip-card-back" >
-                    <div>
-                      <p class="small-text my-1">Centro de Servicios VISA (011) 4379-3400 Call Collect desde el exterior (54-11) 4379-3434 </p>
-                    </div>
-                    <div class="black-stripe"></div>
-                    <div>
-                      <p class="small-text my-1">En el exterior llame: EE.UU. y Canada: 1-(800) 396-9665. Otros paises: 1 (303) 967-1098 </p>
-                    </div>
-                    <div class="stripe-cvv-container">
-                      <div class="stripe-fringe">
-                        <div class="light-blue-stripe"></div>
-                        <div class="orange-stripe"></div>
-                        <div class="light-blue-stripe"></div>
-                        <div class="orange-stripe"></div>
-                        <div class="light-blue-stripe"></div>
-                        <div class="orange-stripe"></div>
-                        <div class="light-blue-stripe"></div>
-                        <div class="orange-stripe"></div>
-                      </div>
+                      <div class="black-stripe"></div>
                       <div>
-                        <p>{{card.cvv}}</p>
+                        <p class="small-text my-1">En el exterior llame: EE.UU. y Canada: 1-(800) 396-9665. Otros paises: 1 (303) 967-1098 </p>
+                      </div>
+                      <div class="stripe-cvv-container">
+                        <div class="stripe-fringe">
+                          <div class="light-blue-stripe"></div>
+                          <div class="orange-stripe"></div>
+                          <div class="light-blue-stripe"></div>
+                          <div class="orange-stripe"></div>
+                          <div class="light-blue-stripe"></div>
+                          <div class="orange-stripe"></div>
+                          <div class="light-blue-stripe"></div>
+                          <div class="orange-stripe"></div>
+                        </div>
+                        <div>
+                          <p>{{card.cvv}}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
+                </div>
+                <div class="my-1">
+                  <button class="btn btn-primary border" v-on:click="deleteCard(card.id)">Delete Card</button>
                 </div>
               </div>
             </div>
@@ -197,6 +213,7 @@
         <div v-if="!(cards.length > 5)" class="d-flex justify-content-center pb-3">
           <a class="btn btn-primary border" href="./create-cards.html">Add New Card</a>
         </div>
+        
       </div>
     </main>
   </div>

@@ -1,5 +1,7 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.Services.ClientService;
+import com.mindhub.homebanking.Services.implement.ClientServiceImpl;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
@@ -22,23 +24,18 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping("/api")
 public class ClientController {
-    @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private ClientService clientService;
 
-    //cambiar nombre del metodo
     @GetMapping("/clients")
-    public List<ClientDTO> getAll() {
-        return clientRepository.findAll().stream().map(ClientDTO::new).collect(toList());
+    public List<ClientDTO> getClientsDTO() {
+        return clientService.getClientsDTO();
     }
 
     @GetMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
-        return clientRepository.findById(id).map(ClientDTO::new).orElse(null);
+        return clientService.getClientDtoById(id);
     }
 
     @PostMapping("/clients")
@@ -50,18 +47,15 @@ public class ClientController {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
 
-        if (clientRepository.findByEmail(email) !=  null) {
+        if (clientService.getClientByEmail(email) !=  null){
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         }
-        Account newAccount = new Account(getRandomAccountNumber(accountRepository), LocalDateTime.now(),0);
-        Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
-        client.addAccount(newAccount);
-        clientRepository.save(client);
+        clientService.registerClient(firstName, lastName, email, password);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/clients/current")
     public ClientDTO getAuthenticatedClient(Authentication authentication) {
-        return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+        return clientService.getCurrentClientDTO(authentication);
     }
 }

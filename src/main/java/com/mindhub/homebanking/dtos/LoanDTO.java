@@ -17,7 +17,7 @@ public class LoanDTO {
     private double maxAmount;
     private List<Integer> payments = new ArrayList<>();
     private List<ClientDTO> clients = new ArrayList<>();
-
+    private Float interestPercentage;
     public LoanDTO(){}
     public LoanDTO(Loan loan){
         this.id = loan.getId();
@@ -25,5 +25,6 @@ public class LoanDTO {
         this.maxAmount = loan.getMaxAmount();
         this.payments = loan.getPayments();
         this.clients = loan.getClients().stream().map(ClientDTO::new).collect(toList());
+        this.interestPercentage = loan.getInterestPercentage();
     }
 }
