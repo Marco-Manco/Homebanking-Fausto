@@ -55,7 +55,7 @@ public class AccountController {
             return new ResponseEntity<>("You already have 3 accounts", HttpStatus.FORBIDDEN);
         }
 
-        accountService.createAccount(authentication, currentClient, accountType);
+        accountService.create(authentication, currentClient, accountType);
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
     }
 
@@ -79,10 +79,10 @@ public class AccountController {
         if(accountNumber.isEmpty()){
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
-        if(accountService.getAccountByNumber(accountNumber).getBalance()>0){
+        if(accountService.getByNumber(accountNumber).getBalance()>0){
             return new ResponseEntity<>("You can not delete an account with balance, transfer the money first", HttpStatus.FORBIDDEN);
         }
-        accountService.deleteAccount(authentication, accountNumber);
+        accountService.delete(accountNumber);
         return new ResponseEntity<>("Account deleted successfully", HttpStatus.OK);
     }
 

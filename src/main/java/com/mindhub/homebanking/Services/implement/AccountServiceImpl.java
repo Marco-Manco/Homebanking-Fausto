@@ -37,6 +37,7 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findAll().stream().map(AccountDTO::new).collect(toList());
     }
 
+    //borrar
     @Override
     public AccountDTO getAccountDtoById(Long id) {
         Account account = accountRepository.findById(id).orElse(null);
@@ -47,13 +48,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccountById(Long id) {
+    public Account getById(Long id) {
         return accountRepository.findById(id).orElse(null);
     }
 
 
     @Override
-    public void createAccount(Authentication authentication, Client currentClient, AccountType accountType) {
+    public void create(Authentication authentication, Client currentClient, AccountType accountType) {
         Account newAccount = new Account(getRandomAccountNumber(accountRepository), LocalDateTime.now(),0, accountType);
         currentClient.addAccount(newAccount);
         clientService.saveClient(currentClient);
@@ -66,18 +67,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccountByNumber(String accountNumber) {
+    public Account getByNumber(String accountNumber) {
         Account account = accountRepository.findByNumber(accountNumber);
-        return account.isEnabled() ? account : null;
+        if(account==null){
+            return null;
+        }
+        return account;
     }
 
     @Override
-    public void saveAccount(Account account) {
+    public void save(Account account) {
         accountRepository.save(account);
     }
 
     @Override
-    public void deleteAccount(Authentication authentication, String accountNumber) {
+    public void delete(String accountNumber) {
         Account account = accountRepository.findByNumber(accountNumber);
         if (account != null) {
             account.setEnabled(false);

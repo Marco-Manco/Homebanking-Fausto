@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="./web-styles/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body id="app">
-  <div class="main-container d-flex flex-column flex-md-row">
+<body>
+  <div id="app">
     <div class="vertical-navbar">
       <nav class="navbar navbar-expand-md navbar-light d-flex flex-md-column">
           <a href="#">
@@ -41,11 +41,11 @@
       </nav>
     </div>
 
-    <main class="flex-grow-1 d-flex flex-column align-items-center justify-content-center d-md-flex flex-md-row">
+    <main class="flex-grow-1 d-flex flex-column align-items-center">
       <div class="form-card-preview-container">
       
         <div class="flip-card mb-2">
-          <h3 class="white">Card preview</h3>
+          <h3>Card preview</h3>
           <div class="flip-card-inner border-card">
   
             <div class="flip-card-front">
@@ -108,10 +108,9 @@
           </div>
         </div>
         
-  
-        <div class="border form-container">
+        <div class="form-container">
           <form v-on:submit.prevent="addCard">
-            <div class="d-flex  flex-column p-2">
+            <div class="d-flex  flex-column p-2 align-items-center">
               <legend>Card Color:</legend>
               <div class="d-flex gap-2">
                 <label>Silver
@@ -126,7 +125,7 @@
               </div>
             </div>
             
-            <div class="d-flex flex-column p-2">
+            <div class="d-flex flex-column p-2 align-items-center">
               <legend>Card Type:</legend>
               <div class="d-flex  gap-2">
                 <label>Credit
@@ -136,7 +135,7 @@
                   <input type="radio" name="card-type" value="DEBIT" v-model="cardType">
                 </label>  
               </div>
-              <button type="submit" class="btn btn-primary my-2">Add Card</button>
+              <button type="submit" class="btn btn-primary my-2 w-75">Add Card</button>
             </div>
           </form>
         </div>

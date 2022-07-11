@@ -16,25 +16,21 @@ import javax.servlet.http.HttpSession;
 @Configuration
 public class WebAuthorization extends WebSecurityConfigurerAdapter {
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        //refactorizar estos antmatchers!
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/web/index.html").permitAll()
-                .antMatchers("/web/accounts.html","/web/account.html","/web/cards.html","/web/create-cards.html","/web/transfers.html").hasAnyAuthority("CLIENT","ADMIN")
+                .antMatchers("/web/index.html", "/web/web-styles/**", "/web/web-javascript/index.js").permitAll()
+                .antMatchers("/web/**").hasAnyAuthority("CLIENT","ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts").hasAnyAuthority("CLIENT", "ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/clients/current/cards").hasAnyAuthority("CLIENT", "ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/transactions", "/api/cards/payment").hasAnyAuthority("CLIENT", "ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/loans", "/api/clients/current/transactions").hasAnyAuthority("CLIENT","ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/loans").hasAnyAuthority("CLIENT","ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts","/api/clients/current/cards"
+                        ,"/api/transactions","/api/cards/payment","/api/loans").hasAnyAuthority("CLIENT", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/loans/new").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/clients/current").hasAnyAuthority("CLIENT","ADMIN")
-                .antMatchers(HttpMethod.GET,"/api/clients/current/accounts", "/api/accounts/{id}").hasAnyAuthority("CLIENT","ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/clients/current/cards").hasAnyAuthority("CLIENT","ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/clients/current/cards", "/api/clients/current/accounts").hasAnyAuthority("CLIENT","ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/loans", "/api/clients/current/transactions"
+                        ,"/api/clients/current","/api/clients/current/accounts", "/api/accounts/{id}"
+                        ,"/api/clients/current/cards").hasAnyAuthority("CLIENT","ADMIN")
+                .antMatchers(HttpMethod.PATCH, "/api/clients/current/cards", "/api/clients/current/accounts").hasAnyAuthority("CLIENT","ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/**", "/rest/**", "/h2-console/**").hasAuthority("ADMIN");
 
         http.formLogin()
@@ -69,7 +65,6 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
     private void clearAuthenticationAttributes(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
-
         if (session != null) {
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         }

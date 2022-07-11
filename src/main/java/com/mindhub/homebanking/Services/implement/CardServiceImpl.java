@@ -65,7 +65,7 @@ public class CardServiceImpl implements CardService {
                 account.getBalance() - cardPaymentDTO.getPaymentAmount());
         account.setBalance(account.getBalance() - cardPaymentDTO.getPaymentAmount());
         account.addTransaction(transaction);
-        accountService.saveAccount(account);
+        accountService.save(account);
     }
 
     @Override

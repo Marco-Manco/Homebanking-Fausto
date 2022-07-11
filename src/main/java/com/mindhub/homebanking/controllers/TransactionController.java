@@ -34,8 +34,8 @@ public class TransactionController {
                                              @RequestParam String sourceAccountNumber, @RequestParam String destinationAccountNumber) {
 
         Client currentClient = clientService.getClientByEmail(authentication.getName());
-        Account sourceAccount = accountService.getAccountByNumber(sourceAccountNumber);
-        Account destinationAccount = accountService.getAccountByNumber(destinationAccountNumber);
+        Account sourceAccount = accountService.getByNumber(sourceAccountNumber);
+        Account destinationAccount = accountService.getByNumber(destinationAccountNumber);
 
         if(transactionAmount.isEmpty() || description.isEmpty() || sourceAccountNumber.isEmpty() || destinationAccountNumber.isEmpty()){
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
@@ -46,7 +46,7 @@ public class TransactionController {
         if(sourceAccount == null){
             return new ResponseEntity<>("The account does not exist", HttpStatus.FORBIDDEN);
         }
-        if(Integer.parseInt(transactionAmount) <= 0){
+        if(Double.parseDouble(transactionAmount) <= 0){
             return new ResponseEntity<>("The amount can not be negative",HttpStatus.FORBIDDEN);
         }
         if(!currentClient.containsAccount(sourceAccountNumber)){
@@ -71,7 +71,7 @@ public class TransactionController {
         if(accountId == null){
             return new ResponseEntity<>("Missing data (accountId)", HttpStatus.FORBIDDEN);
         }
-        Account account = accountService.getAccountById(accountId);
+        Account account = accountService.getById(accountId);
         if(!account.isEnabled()){
             return new ResponseEntity<>("The account have been deleted", HttpStatus.FORBIDDEN);
         }

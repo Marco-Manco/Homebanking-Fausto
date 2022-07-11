@@ -68,11 +68,42 @@ Vue.createApp({
     async deleteAccount(accountNumber){
       try {
         await axios.patch(`/api/clients/current/accounts?accountNumber=${accountNumber}`)
-        location.reload()
+        Swal.fire('Account deleted!', '', 'success')
+        .then(() =>{
+          location.reload()
+        })
       } catch (error) {
-        console.log(error.response.data)
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `${error.response.data}`,
+        })
       }
     },
+    openDeleteSwal(accountNumber, accountAmount){
+      if(accountAmount > 0){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'You can not delete an account with a balance!',
+        })
+      }else{
+        Swal.fire({
+          title: 'Are you sure you want to delete the account?',
+          showDenyButton: true,
+          confirmButtonText: 'Yes',
+          denyButtonText: `No`,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            this.deleteAccount(accountNumber)
+          } else if (result.isDenied) {
+            Swal.fire('Changes are not saved', '', 'info')
+          }
+        })
+      }
+    },
+
     openModal(){
       $('#staticBackdrop').modal('show'); // abrir
     },

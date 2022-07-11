@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="./web-styles/style.css">
 </head>
-<body id="app">
-  <div class="main-container d-flex flex-column flex-md-row">
+<body>
+  <div id="app">
     <div class="vertical-navbar">
       <nav class="navbar navbar-expand-md navbar-light d-flex flex-md-column">
           <a href="#">
@@ -45,13 +45,13 @@
       <div class="align-self-center transfer-form-container">
         <form v-on:submit.prevent="transfer">
           <div class="d-flex flex-column gap-2">
-            <p class="m-0 p-0 white form-title">Type of transfer</p>
+            <p class="m-0 p-0 form-title">Type of transfer</p>
             <div class="d-flex gap-3 justify-content-center">
-              <label class="white">
-                Own account <span class="mensaje-boton-disabled white" v-if="accounts?.length <= 1">You only have one account </span>
+              <label>
+                Own account <span class="mensaje-boton-disabled" v-if="accounts?.length <= 1">You only have one account </span>
                 <input type="radio" name="typeOfTransfer" value="ownAccount" v-model="destinationAccount" required v-bind:disabled="accounts?.length > 1 ? false : true">
               </label>
-              <label class="white">
+              <label>
                 Third party account
                 <input type="radio" name="typeOfTransfer" value="externalAccount" v-model="destinationAccount" required>
               </label>
@@ -60,15 +60,15 @@
     
           <div v-if="destinationAccount !=''">
             <div v-if="destinationAccount == 'ownAccount'">
-              <div class="my-2">
-                <p class="p-0 m-0 white">Source Account</p>
+              <div class="my-2 d-flex gap-3">
+                <p class="p-0 m-0">Source Account</p>
                 <select v-model="sourceAccount" required>
                   <option v-bind:value="account.number" v-for="account in accounts">{{account.number}}</option>
                 </select>
               </div>
       
-              <div>
-                <p class="p-0 m-0 white">Destination Account</p>
+              <div class="d-flex gap-3">
+                <p class="p-0 m-0">Destination Account</p>
                 <select v-model="arrivalAccount" required>
                   <option v-bind:disabled="account.number == sourceAccount" v-bind:value="account.number" v-for="account in accounts">
                     {{account.number}}
@@ -78,15 +78,15 @@
             </div>
     
             <div v-else>
-              <div class="my-2">
-                <p class="p-0 m-0 white">Source Account</p>
+              <div class="my-2 d-flex gap-3">
+                <p class="p-0 m-0">Source Account</p>
                 <select v-model="sourceAccount" required>
                   <option v-bind:value="account.number" v-for="account in accounts">{{account.number}}</option>
                 </select>
               </div>
       
               <div class="my-2">
-                <label class="white">
+                <label>
                   Write the destination account
                   <input type="text" v-model="arrivalAccount" required>
                 </label>
@@ -94,14 +94,14 @@
             </div>
     
             <div class="my-2">
-              <label class="white">
+              <label>
                 Amount
-                <input required type="number" min="1" step="0.01" v-model="amount" >
+                <input required type="number" min="1" step="0.01" v-model="amount">
               </label>
             </div>
 
             <div class="my-2">
-              <label class="white">
+              <label>
                 Description
                 <input type="text" name="description" v-model="description" required>
               </label>

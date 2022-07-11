@@ -13,12 +13,12 @@ import java.util.Set;
 public interface AccountService {
     List<AccountDTO> getAccountsDTO();
     AccountDTO getAccountDtoById(Long id);
-    Account getAccountById(Long id);
-    void createAccount(Authentication authentication, Client currentClient, AccountType accountType);
+    Account getById(Long id);
+    void create(Authentication authentication, Client currentClient, AccountType accountType);
     Set<AccountDTO> getCurrentClientAccountsDTO(Authentication authentication);
-    Account getAccountByNumber(String accountNumber);
-    void saveAccount(Account account);
-    void deleteAccount(Authentication authentication, String accountNumber);
+    Account getByNumber(String accountNumber);
+    void save(Account account);
+    void delete(String accountNumber);
 
     Account getCurrentClientAccountWithSufficientBalance(Authentication authentication, Double paymentAmount);
 }

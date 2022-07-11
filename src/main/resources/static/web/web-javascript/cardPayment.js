@@ -26,10 +26,17 @@ Vue.createApp({
             description: this.description
           },
           {headers:{'content-type':'application/json'}})
+          Swal.fire('Payment made', '', 'success')
+          .then(() =>{
+            location.reload()
+          })
         console.log("successfully payment")
       } catch (error) {
-        console.log(error.response.data)
-
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: `${error.response.data}`,
+        })
       }
     },
     
@@ -38,7 +45,22 @@ Vue.createApp({
         .then(()=>{
           let [url] = location.href.split("web")
           location.href = `${url}web/index.html`
-        })//borrar codigo repetido luego
+        })
+    },
+    openPaySwal(){
+      Swal.fire({
+        title: 'Are you sure to make the payment?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'No',
+        confirmButtonText: 'Yes'
+      }).then((result) => {
+        if (result.isConfirmed){
+          this.makeAPayment()
+        }
+      })
     },
 
   },

@@ -39,7 +39,7 @@ public class LoanController {
     public ResponseEntity<Object> createLoan(Authentication authentication, @RequestBody LoanApplicationDTO loanAplicationDTO){
         Client currentClient = clientService.getClientByEmail(authentication.getName());
         Loan loan = loanService.getLoanById(loanAplicationDTO.getLoanId());
-        Account destinationAccount = accountService.getAccountByNumber(loanAplicationDTO.getDestinationAccountNumber());
+        Account destinationAccount = accountService.getByNumber(loanAplicationDTO.getDestinationAccountNumber());
 
         if(loanAplicationDTO.isSomePropertyNull()){
             return new ResponseEntity<>("Missing data",HttpStatus.FORBIDDEN);
