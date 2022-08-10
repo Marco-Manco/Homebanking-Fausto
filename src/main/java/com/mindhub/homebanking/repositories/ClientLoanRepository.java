@@ -6,6 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClientLoanRepository extends JpaRepository<ClientLoan, Long> {
 
-    interface CardRepository extends JpaRepository<Card, Long> {
-    }
+
 }
