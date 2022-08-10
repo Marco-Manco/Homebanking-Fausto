@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class CardPaymentDTO {
-//    número, código de seguridad, monto y descripción
 
     private String cardNumber;
     private Integer cardCvv;

@@ -6,6 +6,7 @@ var specialElementHandlers = {
     return true
   }
 }
+
 Vue.createApp({
 
   data() {
@@ -32,6 +33,7 @@ Vue.createApp({
         console.error(error)
       } 
     },
+
     async getTransactions(accountId){
       try {
         const {data} = await axios.get(`/api/clients/current/transactions?accountId=${accountId}`)
@@ -40,6 +42,7 @@ Vue.createApp({
         console.error(error)
       } 
     },
+
     classObject(transactionType) {
       return {
         'text-danger': transactionType == 'DEBIT',
@@ -48,6 +51,7 @@ Vue.createApp({
         'table-success': transactionType == 'CREDIT',
       }
     },
+
     logOutClient(){
       axios.post('/api/logout').then(response => console.log('signed out!!!'))
         .then(()=>{
@@ -55,11 +59,13 @@ Vue.createApp({
           location.href = `${url}web/index.html`
         })//borrar codigo repetido luego
     },
+
     formatDate(localDateTime){
       let [date,hour] = localDateTime.split("T")
       let [formatedHour] = hour.split(".")
       return `${date} ${formatedHour}`
     },
+
     async filterTransactions(){
       try {
         const {data} = await axios.get(`/api/clients/current/transactions?accountId=${accountId}&start=${this.fromDate + 'T00:00:00'}&end=${this.thruDate + 'T00:00:00'}`)
@@ -68,8 +74,8 @@ Vue.createApp({
         console.error(error)
       } 
     },
-    print(){
 
+    print(){
       let doc = new jsPDF()
       doc.autoTable({
         head:[['Type','Amount','Description','Date','Remaining balance']],

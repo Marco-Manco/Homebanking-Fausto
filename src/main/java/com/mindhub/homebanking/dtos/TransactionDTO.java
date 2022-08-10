@@ -1,7 +1,7 @@
 package com.mindhub.homebanking.dtos;
 
 import com.mindhub.homebanking.models.Transaction;
-import com.mindhub.homebanking.models.TransactionType;
+import com.mindhub.homebanking.models.enums.TransactionType;
 import lombok.Data;
 
 import java.time.LocalDateTime;

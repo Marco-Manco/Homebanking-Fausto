@@ -1,7 +1,10 @@
 package com.mindhub.homebanking.models;
 
+import com.mindhub.homebanking.models.enums.CardType;
+import com.mindhub.homebanking.models.enums.ColorType;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 

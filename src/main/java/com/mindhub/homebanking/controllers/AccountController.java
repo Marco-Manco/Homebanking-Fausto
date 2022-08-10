@@ -3,7 +3,7 @@ import com.mindhub.homebanking.Services.AccountService;
 import com.mindhub.homebanking.Services.ClientService;
 import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.AccountType;
+import com.mindhub.homebanking.models.enums.AccountType;
 import com.mindhub.homebanking.models.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -25,26 +26,28 @@ public class AccountController {
 
     @GetMapping("/accounts")
     public List<AccountDTO> getAccountsDTO() {
-        return accountService.getAccountsDTO();
+        return accountService.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/accounts/{id}")
-    public AccountDTO getAccountById(Authentication authentication, @PathVariable Long id){
+    public ResponseEntity<?> getCurrentClientAccountById(Authentication authentication, @PathVariable Long id){
         Client currentClient = clientService.getClientByEmail(authentication.getName());
-        AccountDTO account = accountService.getAccountDtoById(id);
-        if(account==null){
-            return null;
+        Account account = accountService.getEnabledAccountById(id);
+
+        if(account == null){
+            return new ResponseEntity<>("The account does not exist", HttpStatus.FORBIDDEN);
         }
         if(!currentClient.containsAccount(account.getNumber())){
-            return null;
+            return new ResponseEntity<>("The account does not belong to you", HttpStatus.FORBIDDEN);
         }
-        return accountService.getAccountDtoById(id);
+
+        return new ResponseEntity<>(new AccountDTO(accountService.getEnabledAccountById(id)), HttpStatus.OK);
     }
 
     @PostMapping("/clients/current/accounts")
-    public ResponseEntity<Object> createAccount(Authentication authentication, @RequestParam AccountType accountType) {
+    public ResponseEntity<?> createAccount(Authentication authentication, @RequestParam AccountType accountType) {
         Client currentClient = clientService.getClientByEmail(authentication.getName());
-        //no estoy seguro si este primer if ese necesario en este contexto, investigar!
+
         if (currentClient == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -65,10 +68,18 @@ public class AccountController {
     }
 
     @PatchMapping("/clients/current/accounts")
-    public ResponseEntity<Object> deleteAccount(Authentication authentication, @RequestParam String accountNumber){
+    public ResponseEntity<?> deleteAccount(Authentication authentication, @RequestParam String accountNumber){
         Client currentClient = clientService.getClientByEmail(authentication.getName());
+        if(accountNumber.isEmpty()){
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        Account account = accountService.getByNumber(accountNumber);
+
         if (currentClient == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        if(account == null){
+            return new ResponseEntity<>("The account does not exist", HttpStatus.FORBIDDEN);
         }
         if(accountService.getCurrentClientAccountsDTO(authentication).size()<2){
             return new ResponseEntity<>("You must have unless one account", HttpStatus.FORBIDDEN);
@@ -76,8 +87,8 @@ public class AccountController {
         if(!currentClient.containsAccount(accountNumber)){
             return new ResponseEntity<>("You cannot delete an account that is not yours", HttpStatus.FORBIDDEN);
         }
-        if(accountNumber.isEmpty()){
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        if(!account.isEnabled()){
+            return new ResponseEntity<>("The account has been already deleted", HttpStatus.FORBIDDEN);
         }
         if(accountService.getByNumber(accountNumber).getBalance()>0){
             return new ResponseEntity<>("You can not delete an account with balance, transfer the money first", HttpStatus.FORBIDDEN);

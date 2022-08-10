@@ -12,6 +12,5 @@ public interface TransactionService {
     void createTransaction(Account sourceAccount, Account destinationAccount, String transactionAmount, String description);
     void deleteTransactionsForAccount(Account account);
     Set<TransactionDTO> getAccountTransactionsBetweenDates(Account account, LocalDateTime start, LocalDateTime end);
-
     Set<TransactionDTO> getAccountTransactions(Account account);
 }

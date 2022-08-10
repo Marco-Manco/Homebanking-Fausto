@@ -1,6 +1,6 @@
 package com.mindhub.homebanking.models;
 
-import lombok.Data;
+import com.mindhub.homebanking.models.enums.AccountType;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;

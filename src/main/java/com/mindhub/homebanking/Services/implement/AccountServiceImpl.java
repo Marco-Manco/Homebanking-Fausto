@@ -4,12 +4,10 @@ import com.mindhub.homebanking.Services.AccountService;
 import com.mindhub.homebanking.Services.ClientService;
 import com.mindhub.homebanking.Services.TransactionService;
 import com.mindhub.homebanking.dtos.AccountDTO;
-import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.AccountType;
+import com.mindhub.homebanking.models.enums.AccountType;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.mindhub.homebanking.utils.Utils.getRandomAccountNumber;
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -33,25 +30,18 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private TransactionService transactionService;
     @Override
-    public List<AccountDTO> getAccountsDTO() {
-        return accountRepository.findAll().stream().map(AccountDTO::new).collect(toList());
+    public List<Account> getAccounts() {
+        return accountRepository.findAll();
     }
 
-    //borrar
     @Override
-    public AccountDTO getAccountDtoById(Long id) {
+    public Account getEnabledAccountById(Long id) {
         Account account = accountRepository.findById(id).orElse(null);
         if(account != null){
-            return account.isEnabled() ? new AccountDTO(account) : null;
+            return account.isEnabled() ? account : null;
         }
         return null;
     }
-
-    @Override
-    public Account getById(Long id) {
-        return accountRepository.findById(id).orElse(null);
-    }
-
 
     @Override
     public void create(Authentication authentication, Client currentClient, AccountType accountType) {

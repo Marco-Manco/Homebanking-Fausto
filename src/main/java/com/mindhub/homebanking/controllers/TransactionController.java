@@ -71,9 +71,9 @@ public class TransactionController {
         if(accountId == null){
             return new ResponseEntity<>("Missing data (accountId)", HttpStatus.FORBIDDEN);
         }
-        Account account = accountService.getById(accountId);
-        if(!account.isEnabled()){
-            return new ResponseEntity<>("The account have been deleted", HttpStatus.FORBIDDEN);
+        Account account = accountService.getEnabledAccountById(accountId);
+        if(account == null){
+            return new ResponseEntity<>("The account does not exist", HttpStatus.FORBIDDEN);
         }
         if(!currenClient.getAccounts().contains(account)){
             return new ResponseEntity<>("The account is not yours", HttpStatus.FORBIDDEN);

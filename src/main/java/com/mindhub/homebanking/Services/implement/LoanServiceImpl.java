@@ -3,8 +3,9 @@ package com.mindhub.homebanking.Services.implement;
 import com.mindhub.homebanking.Services.LoanService;
 import com.mindhub.homebanking.dtos.LoanApplicationDTO;
 import com.mindhub.homebanking.dtos.LoanCreationApplicationDTO;
-import com.mindhub.homebanking.dtos.LoanVisibleToTheCLientDTO;
+import com.mindhub.homebanking.dtos.LoanDTO;
 import com.mindhub.homebanking.models.*;
+import com.mindhub.homebanking.models.enums.TransactionType;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.LoanRepository;
@@ -28,8 +29,8 @@ public class LoanServiceImpl implements LoanService {
 
 
     @Override
-    public List<LoanVisibleToTheCLientDTO> getLoansDTO() {
-        return loanRepository.findAll().stream().map(LoanVisibleToTheCLientDTO::new).collect(Collectors.toList());
+    public List<LoanDTO> getLoansDTO() {
+        return loanRepository.findAll().stream().map(LoanDTO::new).collect(Collectors.toList());
     }
 
     @Override

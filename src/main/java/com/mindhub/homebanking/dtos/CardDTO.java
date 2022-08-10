@@ -1,12 +1,11 @@
 package com.mindhub.homebanking.dtos;
 
 import com.mindhub.homebanking.models.Card;
-import com.mindhub.homebanking.models.CardType;
-import com.mindhub.homebanking.models.ColorType;
+import com.mindhub.homebanking.models.enums.CardType;
+import com.mindhub.homebanking.models.enums.ColorType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
 public class CardDTO {
@@ -16,7 +15,6 @@ public class CardDTO {
     private ColorType color;
     private String number;
     private int cvv;
-    //cambiar el tipo de dato string por uno mas acorde luego (month/year)!
     private LocalDateTime fromDate;
     private LocalDateTime thruDate;
 

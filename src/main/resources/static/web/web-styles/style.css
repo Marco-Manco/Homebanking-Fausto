@@ -97,16 +97,6 @@ h1{
 		box-shadow: none;
 }
 
-/* 
-
-.subtitle{
-	font-weight: 600;
-	font-size: 1.1rem;
-}
-
- */
-
-
 /* card colors */
 .gold{
 	background: url(../assets/gold-bg.jpg);
@@ -275,7 +265,7 @@ object{
 	text-align: center;
 	font-weight: 500;
 } 
-/*
+
 /*loan*/
  .loan-form-container{
 	width: 90%;
@@ -290,15 +280,6 @@ object{
 	background-color: #dfefed;
 }
 
-/*
-
-.last-transaction-container{
-	margin: 1rem;
-	padding: .5rem;
-	border-radius: 2%;
-	border: solid 1px rgba(255, 255, 255, 0.773);
-	background-color: rgba(47, 47, 47, 0.554);
-} */
 /*card payment*/
 .payment-form-container{
 	margin-top: 2rem;
@@ -324,7 +305,6 @@ object{
 	
 	.transfer-form-container form{
 		width: 75%;
-		
 	}
 	
 	.form-title{
@@ -458,7 +438,6 @@ object{
 	
 	.transfer-form-container form{
 		width: 60%;
-		
 	}
 	
 	.form-title{

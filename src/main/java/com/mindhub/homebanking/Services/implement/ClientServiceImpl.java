@@ -2,11 +2,9 @@ package com.mindhub.homebanking.Services.implement;
 
 import com.mindhub.homebanking.Services.ClientService;
 import com.mindhub.homebanking.dtos.AccountDTO;
-import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.AccountType;
-import com.mindhub.homebanking.models.Card;
+import com.mindhub.homebanking.models.enums.AccountType;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;

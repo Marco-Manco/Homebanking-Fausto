@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.models;
 
+import com.mindhub.homebanking.models.enums.TransactionType;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 

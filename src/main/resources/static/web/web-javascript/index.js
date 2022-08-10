@@ -15,7 +15,6 @@ Vue.createApp({
   },
 
   created() {
-    // axios.post('/api/clients',"firstName=pedro2&lastName=rodriguez&email=pedro@mindhub.com&password=pedro",{headers:{'content-type':'application/x-www-form-urlencoded'}}).then(response => console.log('registered'))
     
   },
 

@@ -6,10 +6,9 @@ import com.mindhub.homebanking.Services.CardService;
 import com.mindhub.homebanking.Services.ClientService;
 import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.dtos.CardPaymentDTO;
-import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.*;
-import com.mindhub.homebanking.repositories.CardRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.models.enums.CardType;
+import com.mindhub.homebanking.models.enums.ColorType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +20,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.mindhub.homebanking.utils.Utils.getRandomCardNumber;
 
 @RestController
 @RequestMapping("/api")
